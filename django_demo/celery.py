@@ -12,8 +12,8 @@ __version__ = ''
 __all__ = []
 
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE","dj3_demo.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE","django_demo.settings")
 
-app = Celery("dj3_demo")
+app = Celery("django_demo")
 app.config_from_object("django.conf:settings")
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)

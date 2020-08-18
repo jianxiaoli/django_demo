@@ -1,4 +1,4 @@
-"""dj3_demo URL Configuration
+"""django_demo URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.0/topics/http/urls/
@@ -13,17 +13,19 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path
-
 
 from django.conf.urls import url
 from django.contrib import admin
 
+import django_demo
+import user
+from django_demo import views
+from user import views
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^index/', views.index),
-    url(r'^login/', views.login),
-    url(r'^register/', views.register),
-    url(r'^logout/', views.logout),
+    url(r'^$', django_demo.views.index),
+    url(r'^index/', django_demo.views.index),
+    url(r'^user/toLogin/', user.views.toLogin,name='toLogin'),
+    url(r'^user/toRegister/', user.views.toRegister,name='toRegister'),
     ]
