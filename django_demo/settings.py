@@ -46,16 +46,19 @@ CELERY_TASK_ALWAYS_EAGER = True
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'user'
+    'django_demo.apps.user'
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -91,11 +94,14 @@ WSGI_APPLICATION = 'django_demo.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',   #  指定数据库驱动
+        'NAME': 'django_demo',   #  指定的数据库名
+        'USER': 'devops',   #  数据库登录的用户名
+        'PASSWORD': 'Oqa_rG1j8jLDBNv',  #  登录数据库的密码
+        'HOST': '10.248.224.131',
+        'PORT': '3306',   #  数据库服务器端口，mysql默认为3306
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators

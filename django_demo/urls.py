@@ -18,14 +18,15 @@ from django.conf.urls import url
 from django.contrib import admin
 
 import django_demo
-import user
 from django_demo import views
-from user import views
+from django_demo.apps.user import views
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    url(r'^admin', admin.site.urls),
     url(r'^$', django_demo.views.index),
-    url(r'^index/', django_demo.views.index),
-    url(r'^user/toLogin/', user.views.toLogin,name='toLogin'),
-    url(r'^user/toRegister/', user.views.toRegister,name='toRegister'),
+    url(r'^index', django_demo.views.index, name='index'),
+    url(r'^user/to_login', django_demo.apps.user.views.to_login, name='to_login'),
+    url(r'^user/to_register', django_demo.apps.user.views.to_register, name='to_register'),
+    url(r'^user/register', django_demo.apps.user.views.register, name='register'),
+    url(r'^user/login', django_demo.apps.user.views.login, name='login'),
     ]
