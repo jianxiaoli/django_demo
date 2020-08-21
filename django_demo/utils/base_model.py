@@ -69,5 +69,4 @@ class BaseModel(models.Model):
         return d
 
     def toJSON(self):
-        import json
         return json.dumps(self.getDict(), ensure_ascii=False).encode('utf-8').decode()
