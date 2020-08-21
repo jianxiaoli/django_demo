@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import redis
-
 from django_demo import settings, logger
 
 

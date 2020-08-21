@@ -4,11 +4,9 @@ from django.contrib.auth.hashers import make_password, check_password
 from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 
+from django_demo import logger
 from django_demo.apps.user.models import UserInfo
 from django_demo.utils.response_helper import MyResponse, ResState
-
-
-### 跳转到登录页面
 from django_demo.utils.token_handler import TokenHandler
 
 
@@ -43,7 +41,7 @@ def register(request):
         obj.save()
         myRes.status = ResState.HTTP_SUCCESS
     except Exception as ex:
-        print(ex)
+        logger.error("Register error by {0}".format(ex))
         myRes.msg = str(ex)
 
     return myRes.to_json()
@@ -65,9 +63,41 @@ def login(request):
             return myRes.to_json_msg("密码错误")
         myRes.status = ResState.HTTP_SUCCESS
         myRes.msg = "登录成功"
-        token = TokenHandler().build_token(user.id)
-        return myRes.to_login_json(token)
+        token = TokenHandler().encrypt(str(user.id))
+        ttt = TokenHandler().decrypt(token)
+        response = myRes.to_json()
+        response.set_cookie("is_login", True)
+        return myRes.to_json(token)
     except Exception as ex:
-        print(ex)
+        logger.error("Login error by {0}".format(ex))
         myRes.msg = str(ex)
         return myRes.to_json()
+
+    # """激活"""
+    # def active_user(self,request,token):
+    #     """
+    #
+    #     :param request:
+    #     :param token: token是用户携带的口令，唯一标识用户
+    #     :return:
+    #     """
+    #     # 解析口令token，获取用户身份
+    #     check_token = TokenHandler().check_token(token)
+    #     if check_token is False:
+    #         myRes.to_json_msg("token已失效")
+    #     # 表示token未过期，
+    #     user_id = data.get("confirm")
+    #
+    #     # 查询用户的数据.处理bug
+    #     try:
+    #         user = User.objects.get(id=user_id)
+    #     except User.DoesNotExist:
+    #         # 用户不存在
+    #         return HttpResponse("用户不存在！")
+    #     # 设置用户的激活状态
+    #     user.is_active = True
+    #     user.save()
+    #
+    #     # 返回处理结果
+    #     return HttpResponse("ok")
+    #     # return redirect(reverse("users:login"))

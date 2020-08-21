@@ -1,80 +1,51 @@
-import time
-import base64
-import hashlib
-from django.conf import settings
+#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+from Crypto.Cipher import AES
+from binascii import b2a_hex, a2b_hex
+from django_demo import settings
 
+class TokenHandler(object):
 
-class TokenHandler():
-    """
-    token 加密、解密帮助类
-    """
-    def __init__(self):
-        self.out_time = self.getOutTime()
-        self.time = self.timer
+    def __init__(self, mode=AES.MODE_CBC):
+        self.key = settings.TOKEN_KEY.encode('utf-8')
+        # 密钥key长度必须为16,24或者32bytes的长度
+        self.mode = mode
+        self.iv = b'0000000000000000'
 
-
-        pass
-    def timer(self):
-        return time.time()
-
-
-    def getOutTime(self):
-        try:
-            return settings.__getattr__("OUT_time")   # 在导入的settings中找 OUT_TIME 变量
-        except BaseException:
-            return 60    # 找不到默认60  也可以设置直接抛异常
-
-    def hax(self,str):
+    def encrypt(self, text:str):
         """
-        摘要算法加密
-        :param str: 待加密字符串
-        :return: 加密后的字符串
+        加密函数，如果text不足16位就用空格补足为16位
+        如果大于16当时不是16的倍数，那就补足为16的倍数
+        :param text:
+        :return:
         """
-        if not isinstance(str,bytes): # 如果传入不是bytes类型，则转为bytes类型
-            try:
-                str = bytes(str,encoding="utf8")
-            except BaseException as ex:
-                raise ValueError("'%s'不可被转换为bytes类型"%str)
+        text = text.encode('utf-8')
+        cryptor = AES.new(self.key, self.mode, self.iv)
+        # 这里密钥key 长度必须为16（AES-128）,
+        # 24（AES-192）,或者32 （AES-256）Bytes 长度
+        # 目前AES-128 足够目前使用
+        length = 16
+        count = len(text)
+        if count < length:
+            add = (length - count)
+            # \0 backspace
+            # text = text + ('\0' * add)
+            text = text + ('\0' * add).encode('utf-8')
+        elif count > length:
+            add = (length - (count % length))
+            # text = text + ('\0' * add)
+            text = text + ('\0' * add).encode('utf-8')
+        self.ciphertext = cryptor.encrypt(text)
+        # 因为AES加密时候得到的字符串不一定是ascii字符集的，输出到终端或者保存时候可能存在问题
+        # 所以这里统一把加密后的字符串转化为16进制字符串
+        return b2a_hex(self.ciphertext)
 
-        md5 = hashlib.md5()
-        md5.update("天王盖地虎erafe23".encode(encoding='utf-8'))
-        md5.update(str)
-        md5.update("992ksd上山打老虎da".encode(encoding='utf-8'))
-        return md5.hexdigest()
-
-    def build_token(self,message):
+    def decrypt(self, text:str):
         """
-        hax_message: 待加密字符串内容  格式： '当前时间戳：message：过期时间戳'
-        :param message: 需要生成token的字符串
-        :param time: 过期时间
-        :return: token
+        解密后，去掉补足的空格用strip() 去掉
+        :param text:
+        :return:
         """
-        hax_message = "%s:%s:%s"%(str(self.time()),message,str(float(self.time())+float(self.out_time)))
-        hax_res = self.hax(hax_message)
-        token = base64.urlsafe_b64encode(("%s:%s"%(hax_message,hax_res)).encode(encoding='utf-8'))
-        return token.decode("utf-8")
-
-    def check_token(self,token):
-        """
-
-        :param token: 待检验的token
-        :return: False   or  new token
-        """
-        try:
-            hax_res = base64.urlsafe_b64decode(token.encode("utf8")).decode("utf-8")
-            message_list = hax_res.split(":")
-            md5 = message_list.pop(-1)
-            message = ':'.join(message_list)
-            if md5 != self.hax(message):
-                # 加密内容如果与加密后的结果不符即token不合法
-                return False
-            else:
-                if self.time() - float(message_list.pop(-1)) >0:
-                    # 超时返回False
-                    return False
-                else:
-                    # token验证成功返回新的token
-                    return self.build_token(message_list.pop(-1))
-        except BaseException as ex:
-            # 有异常表明验证失败或者传入参数不合法
-            return False
+        cryptor = AES.new(self.key, self.mode, self.iv)
+        plain_text = cryptor.decrypt(a2b_hex(text))
+        return bytes.decode(plain_text).rstrip('\0')

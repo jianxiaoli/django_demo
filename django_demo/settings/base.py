@@ -116,3 +116,6 @@ USE_TZ = True
 OUT_TIME = 60
 
 THREAD_POOL_EXECUTOR_NUM = 60
+
+# key的长度是否为16,24或者32bytes的长度
+TOKEN_KEY = "123456789qazxswe"

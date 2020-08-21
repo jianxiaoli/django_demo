@@ -39,15 +39,6 @@ class MyResponse(object):
         resp = HttpResponse(content=resp_data,status=200, content_type="application/json")
         return resp
 
-    def to_login_json(self,userid):
-        if self.status == 200:
-            resp_data = json.dumps({"state": True, "data": self.data}, ensure_ascii=False,cls=DumpsEncoder)
-        else:
-            resp_data = json.dumps({"state": False,"code":self.status,"msg":str(self.msg)}, ensure_ascii=False, cls=DumpsEncoder)
-        resp = HttpResponse(content=resp_data,status=200, content_type="application/json")
-        resp.set_cookie("is_login",userid)
-        return resp
-
     def to_json_msg(self,msg,status = None):
         self.msg=msg
         if status:
