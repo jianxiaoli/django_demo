@@ -36,6 +36,9 @@ def register(request):
         user = UserInfo.objects.filter(username=username).first()
         if user:
             return myRes.to_json_msg("用户名已存在")
+        user = UserInfo.objects.filter(email=email).first()
+        if user:
+            return myRes.to_json_msg("邮箱已存在")
         pwd = make_password(pwd, None, 'pbkdf2_sha256')
         user = UserInfo(username=username, pwd=pwd,email=email)
         user.save()
