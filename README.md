@@ -27,7 +27,7 @@ User=root
 Environment="DJANGO_ENV=dev"
 Environment="PYTHONPATH=/opt/pyproject"
 WorkingDirectory=/opt/pyproject/django_demo
-ExecStart=/bin/sh -c 'source /opt/venv/django_demo/bin/activate && gunicorn -c gunicorn.py run:app'
+ExecStart=/bin/sh -c 'source /opt/venv/django_demo/bin/activate && gunicorn -c gunicorn.py django_demo.wsgi:application'
 LimitNOFILE=1024000
 Restart=always
 [Install]
@@ -43,7 +43,7 @@ User=root
 Environment="DJANGO_ENV=dev"
 Environment="PYTHONPATH=/opt/pyproject"
 WorkingDirectory=/opt/pyproject/django_demo
-ExecStart=/bin/sh -c 'source /opt/venv/django_demo/bin/activate && celery -A admin_web.run.celery --workdir=/opt/pyproject/django_demo worker --concurrency=2 --loglevel=INFO --logfile=/data/django-demo.celery.log'
+ExecStart=/bin/sh -c 'source /opt/venv/django_demo/bin/activate && celery -A django_demo --workdir=/opt/pyproject/django_demo worker --concurrency=2 --loglevel=INFO --logfile=/data/django-demo.celery.log'
 LimitNOFILE=1024000
 Restart=always
 [Install]
@@ -61,7 +61,7 @@ Environment="SINGLE_BEAT_IDENTIFIER=celery-beat"
 Environment="SINGLE_BEAT_REDIS_SERVER=redis://127.0.0.1:6379"
 Environment="PYTHONPATH=/opt/pyproject"
 WorkingDirectory=/opt/pyproject/django_demo
-ExecStart=/bin/sh -c 'source /opt/venv/django_demo/bin/activate && single-beat celery -A admin_web.run.celery --workdir=/opt/pyproject/django_demo beat'
+ExecStart=/bin/sh -c 'source /opt/venv/django_demo/bin/activate && single-beat celery -A django_demo --workdir=/opt/pyproject/django_demo beat'
 LimitNOFILE=1024000
 Restart=always
 [Install]
