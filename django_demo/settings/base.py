@@ -30,7 +30,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_demo.apps.user'
+    'django_demo.apps.user',
+    'djcelery'
 ]
 
 MIDDLEWARE = [
@@ -63,6 +64,7 @@ TEMPLATES = [
     },
 ]
 
+# Application definition
 WSGI_APPLICATION = 'django_demo.wsgi.application'
 
 # Password validation
@@ -82,6 +84,10 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+# 支持celery
+import djcelery
+djcelery.setup_loader()
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
