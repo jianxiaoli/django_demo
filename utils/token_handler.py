@@ -52,7 +52,6 @@ class TokenHandler(object):
         """
         cryptor = AES.new(self.key, self.mode, self.iv)
         plain_text = cryptor.decrypt(a2b_hex(decrypt_text))
-        logger.info(plain_text)
         val = bytes.decode(plain_text).rstrip('\0')
         logger.info("Token handler decrypt_text={0} decrypt is {1}".format(decrypt_text,val))
         return val

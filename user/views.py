@@ -82,6 +82,8 @@ def active(request,token):
     logger.info(token)
     try:
         user_id = TokenHandler().decrypt(token)
+        if user_id is None or user_id == "" or user_id == "None":
+            raise Exception("无效的认证")
         user = UserInfo.objects.filter(id=int(user_id)).first()
         if user is None:
             raise Exception("用户不存在")
@@ -91,3 +93,4 @@ def active(request,token):
         return redirect('/user/to_login')
     except Exception as ex:
         logger.error("Login error by {0}".format(ex))
+        return render(request, "error.html", {"msg": str(ex)});
