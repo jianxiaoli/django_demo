@@ -1,23 +1,25 @@
 import re
 
 from django.contrib.auth.hashers import make_password, check_password
-from django.shortcuts import render
+from django.db import transaction
+from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
 
 from django_demo import logger
 from django_demo.apps.user.models import UserInfo
+from django_demo.utils.email_handler import EmailHandler, django_send_email
 from django_demo.utils.response_helper import MyResponse, ResState
 from django_demo.utils.token_handler import TokenHandler
 
-
+# 跳转到登录页面
 def to_login(request):
     return render(request, 'login.html')
 
-### 跳转到注册页面
+# 跳转到注册页面
 def to_register(request):
     return render(request, 'register.html')
 
-### 注册
+# 注册
 @require_http_methods(["POST"])
 def register(request):
     myRes = MyResponse()
@@ -37,16 +39,21 @@ def register(request):
         if user:
             return myRes.to_json_msg("用户名已存在")
         pwd = make_password(pwd, None, 'pbkdf2_sha256')
-        obj = UserInfo(username=username, pwd=pwd,email=email)
-        obj.save()
+        user = UserInfo(username=username, pwd=pwd,email=email)
+        user.save()
         myRes.status = ResState.HTTP_SUCCESS
+        # 将注册激活token发送给用户激活
+        token = TokenHandler().encrypt(str(user.id))
+        user_id = TokenHandler().decrypt(token)
+        logger.info("user_id is {0}".format(user_id))
+        django_send_email(username,token,email)
     except Exception as ex:
         logger.error("Register error by {0}".format(ex))
         myRes.msg = str(ex)
 
     return myRes.to_json()
 
-### 登录
+# 登录
 @require_http_methods(["POST"])
 def login(request):
     myRes = MyResponse()
@@ -61,43 +68,28 @@ def login(request):
         pwd_bool = check_password(pwd, user.pwd)
         if not pwd_bool:
             return myRes.to_json_msg("密码错误")
-        myRes.status = ResState.HTTP_SUCCESS
-        myRes.msg = "登录成功"
-        token = TokenHandler().encrypt(str(user.id))
-        ttt = TokenHandler().decrypt(token)
         response = myRes.to_json()
         response.set_cookie("is_login", True)
-        return myRes.to_json(token)
+        myRes.status = ResState.HTTP_SUCCESS
+        myRes.msg = "登录成功"
+        return myRes.to_json()
     except Exception as ex:
         logger.error("Login error by {0}".format(ex))
         myRes.msg = str(ex)
         return myRes.to_json()
 
-    # """激活"""
-    # def active_user(self,request,token):
-    #     """
-    #
-    #     :param request:
-    #     :param token: token是用户携带的口令，唯一标识用户
-    #     :return:
-    #     """
-    #     # 解析口令token，获取用户身份
-    #     check_token = TokenHandler().check_token(token)
-    #     if check_token is False:
-    #         myRes.to_json_msg("token已失效")
-    #     # 表示token未过期，
-    #     user_id = data.get("confirm")
-    #
-    #     # 查询用户的数据.处理bug
-    #     try:
-    #         user = User.objects.get(id=user_id)
-    #     except User.DoesNotExist:
-    #         # 用户不存在
-    #         return HttpResponse("用户不存在！")
-    #     # 设置用户的激活状态
-    #     user.is_active = True
-    #     user.save()
-    #
-    #     # 返回处理结果
-    #     return HttpResponse("ok")
-    #     # return redirect(reverse("users:login"))
+# 激活
+@require_http_methods(["GET"])
+def active(request,token):
+    logger.info(token)
+    try:
+        user_id = TokenHandler().decrypt(token)
+        user = UserInfo.objects.filter(id=int(user_id)).first()
+        if user is None:
+            raise Exception("用户不存在")
+        if user.is_active == 1:
+            user.is_active = 0
+            user.save()
+        return redirect('/user/to_login')
+    except Exception as ex:
+        logger.error("Login error by {0}".format(ex))

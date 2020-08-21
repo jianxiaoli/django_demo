@@ -119,3 +119,14 @@ THREAD_POOL_EXECUTOR_NUM = 60
 
 # key的长度是否为16,24或者32bytes的长度
 TOKEN_KEY = "123456789qazxswe"
+
+# Email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.126.com'
+EMAIL_PORT = 25
+#发送邮件的邮箱
+EMAIL_HOST_USER = 'test20200821@126.com'
+#在邮箱中设置的客户端授权密码
+EMAIL_HOST_PASSWORD = 'LHXPYPOTDPSPEUDA'
+#收件人看到的发件人
+EMAIL_FROM = 'django_demo<test20200821@126.com>'

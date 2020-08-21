@@ -3,7 +3,7 @@
 import os
 import multiprocessing
 
-bind = '0.0.0.0:8008'   #绑定的ip及端口号
+bind = '0.0.0.0:8000'   #绑定的ip及端口号
 backlog = 512                #监听队列
 chdir = '/opt/django_demo'  #你项目的根目录,比如我的app.py文件在/home/ubuntu/app目录下，就填写'/home/ubuntu/web'
 timeout = 30      #超时

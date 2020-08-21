@@ -16,6 +16,7 @@ Including another URLconf
 
 from django.conf.urls import url
 from django.contrib import admin
+from django.urls import path
 
 import django_demo
 from django_demo import views
@@ -29,4 +30,5 @@ urlpatterns = [
     url(r'^user/to_register', django_demo.apps.user.views.to_register, name='to_register'),
     url(r'^user/register', django_demo.apps.user.views.register, name='register'),
     url(r'^user/login', django_demo.apps.user.views.login, name='login'),
+    path('user/active/<token>',django_demo.apps.user.views.active),
     ]
