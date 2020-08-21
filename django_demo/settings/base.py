@@ -14,37 +14,14 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'pmr+#3!v-xgb@fiwg%kr*t%&ft3*f9$j#*!688=9r@@*fwl6^7'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
-# 支持celery
-import djcelery
-djcelery.setup_loader()
-
-BROKER_URL = 'redis://10.12.214.15:6379/1'
-CELERY_RESULT_BACKEND = 'redis://10.12.214.15:6379/2'
-CELERY_TIMEZONE = 'Asia/Shanghai'
-BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 864000}  # 任务时效 10天
-CELERY_ENABLE_UTC = False
-CELERY_ACCEPT_CONTENT = ['json', 'pickle', 'yaml']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERYD_CONCURRENCY = 16
-CELERYD_FORCE_EXECV = True
-CELERYD_MAX_TASKS_PER_CHILD = 2
-BROKER_POOL_LIMIT = 0  # mysql gone 问题
-CELERY_TASK_ALWAYS_EAGER = True
-# Application definition
-
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 INSTALLED_APPS = [
     'corsheaders',
     'django.contrib.admin',
@@ -73,7 +50,7 @@ ROOT_URLCONF = 'django_demo.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, '../templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -87,21 +64,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'django_demo.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',   #  指定数据库驱动
-        'NAME': 'django_demo',   #  指定的数据库名
-        'USER': 'devops',   #  数据库登录的用户名
-        'PASSWORD': 'Oqa_rG1j8jLDBNv',  #  登录数据库的密码
-        'HOST': '10.248.224.131',
-        'PORT': '3306',   #  数据库服务器端口，mysql默认为3306
-    }
-}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -121,6 +83,21 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/3.0/howto/static-files/
+
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, '../static'),
+]
+TEMPLATE_DIRS = (os.path.join(BASE_DIR, '../templates'),)
+
+
+###日志文件
+LOGFILE_DIR = "/data"
+LOGFILE_NAME = "django-demo.log"
+
+
 # Django自定义设置
 # AUTH_USER_MODEL = 'user.User'
 # Internationalization
@@ -136,21 +113,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.0/howto/static-files/
-
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
-TEMPLATE_DIRS = (os.path.join(BASE_DIR,  'templates'),)
-
 OUT_TIME = 60
 
-### redis配置
-REDIS_CFG = {"host": "10.248.224.131", "port": 6379,"db":0}
-
-###日志文件
-LOGFILE_DIR = "/data"
-LOGFILE_NAME = "django-demo.log"
+THREAD_POOL_EXECUTOR_NUM = 60
