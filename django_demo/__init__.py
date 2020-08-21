@@ -6,7 +6,7 @@ from utils.log_handler import get_log_conf
 login_dict = get_log_conf()
 logging.config.dictConfig(login_dict)
 logger = logging.getLogger('web_info')
-
+logcelery = logging.getLogger('celery_info')
 # mysql配置
 import pymysql
 pymysql.version_info = (1, 4, 13, "final", 0)

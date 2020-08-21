@@ -67,6 +67,4 @@ def django_send_email(username, token,receiver):
                     'http://127.0.0.1:8000/user/active/%s<a></p>' % (username, token, token)  # html邮件体
         send_mail(subject, body, sender, receivers, html_message=html_body)
     except Exception as ex:
-        logger.error(
-            "Send register email username={0},token={1},receiver={2} error by {3}".format(username, token, receiver,
-                                                                                          ex))
+        raise ex

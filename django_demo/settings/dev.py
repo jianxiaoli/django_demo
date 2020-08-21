@@ -22,8 +22,8 @@ CELERYBEAT_LOG_FILE = "/data/django-demo-celery-beat.log"
 # 这里是定时任务的配置
 CELERY_BEAT_SCHEDULE = {
     'task_method': {  # 随便起的名字
-        'task': 'app.tasks.test_celery',  # app 下的tasks.py文件中的方法名
-        'schedule': timedelta(seconds=10),  # 名字为task_method的定时任务, 每10秒执行一次
+        'task': 'user.tasks.test_celery',  # app 下的tasks.py文件中的方法名
+        'schedule': timedelta(seconds=1),  # 名字为task_method的定时任务, 每10秒执行一次
     },
 }
 

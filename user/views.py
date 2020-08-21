@@ -3,6 +3,7 @@ from django.contrib.auth.hashers import make_password, check_password
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
 from django_demo import logger
+from user import tasks
 from user.models import UserInfo
 from utils.email_handler import django_send_email
 from utils.response_helper import MyResponse, ResState
@@ -43,7 +44,7 @@ def register(request):
         token = TokenHandler().encrypt(str(user.id))
         user_id = TokenHandler().decrypt(token)
         logger.info("user_id is {0}".format(user_id))
-        django_send_email(username,token,email)
+        tasks.send_register_email.delay(username,token,email)
     except Exception as ex:
         logger.error("Register error by {0}".format(ex))
         myRes.msg = str(ex)

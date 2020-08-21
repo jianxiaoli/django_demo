@@ -97,6 +97,7 @@ TEMPLATE_DIRS = (os.path.join(BASE_DIR, '../templates'),)
 ###日志文件
 LOGFILE_DIR = "/data"
 LOGFILE_NAME = "django-demo.log"
+LOGFILE_NAME_CELERY = "django-demo-celery.log"
 
 
 # Django自定义设置
