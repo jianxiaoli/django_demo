@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from .base import *
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -5,22 +7,25 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-# 支持celery
-import djcelery
-djcelery.setup_loader()
-BROKER_URL = 'redis://127.0.0.1:6379/1'
-CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/2'
-CELERY_TIMEZONE = 'Asia/Shanghai'
-BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 864000}  # 任务时效 10天
-CELERY_ENABLE_UTC = False
-CELERY_ACCEPT_CONTENT = ['json', 'pickle', 'yaml']
-CELERY_TASK_SERIALIZER = 'json'
+
+# Celery application definition
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/1'
+CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
-CELERYD_CONCURRENCY = 16
-CELERYD_FORCE_EXECV = True
-CELERYD_MAX_TASKS_PER_CHILD = 2
-BROKER_POOL_LIMIT = 0  # mysql gone 问题
-CELERY_TASK_ALWAYS_EAGER = True
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Asia/Shanghai'
+CELERYD_MAX_TASKS_PER_CHILD = 10
+CELERYD_LOG_FILE = "/data/django-demo-celery.log"
+CELERYBEAT_LOG_FILE = "/data/django-demo-celery-beat.log"
+
+# 这里是定时任务的配置
+CELERY_BEAT_SCHEDULE = {
+    'task_method': {  # 随便起的名字
+        'task': 'app.tasks.test_celery',  # app 下的tasks.py文件中的方法名
+        'schedule': timedelta(seconds=10),  # 名字为task_method的定时任务, 每10秒执行一次
+    },
+}
 
 
 # Database

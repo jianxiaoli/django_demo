@@ -1,6 +1,6 @@
 from django.db import models
 
-from django_demo.utils.base_model import BaseModel
+from utils.base_model import BaseModel
 
 
 class UserInfo(BaseModel):

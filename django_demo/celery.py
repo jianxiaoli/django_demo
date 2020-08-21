@@ -1,19 +1,26 @@
-# -*- coding: UTF-8 -*
-
-# 标准库
-from __future__ import unicode_literals, absolute_import
+from __future__ import absolute_import, unicode_literals
 import os
-# 第三方库
-from celery import Celery
-from django.conf import settings
-# 自定义库
+from celery import Celery, platforms
 
-__version__ = ''
-__all__ = []
+# set the default Django settings module for the 'celery' program.
+from django_demo import logger
 
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_demo.settings')
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE","django_demo.settings") #设置django环境
+app = Celery('django_demo')
 
-app = Celery("django_demo")
-app.config_from_object("django.conf:settings") #使用CELERY_ 作为前缀，在settings中写配置
-app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
+# Using a string here means the worker don't have to serialize
+# the configuration object to child processes.
+# - namespace='CELERY' means all celery-related configuration keys
+#   should have a `CELERY_` prefix.
+app.config_from_object('django.conf:settings', namespace='CELERY')
+
+# Load task modules from all registered Django app configs.
+app.autodiscover_tasks()
+
+# 允许root 用户运行celery
+platforms.C_FORCE_ROOT = True
+
+@app.task(bind=True)
+def debug_task(self):
+    logger.info("celert tttttt")

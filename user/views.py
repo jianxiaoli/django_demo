@@ -1,15 +1,12 @@
 import re
-
 from django.contrib.auth.hashers import make_password, check_password
-from django.db import transaction
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
-
 from django_demo import logger
-from django_demo.apps.user.models import UserInfo
-from django_demo.utils.email_handler import EmailHandler, django_send_email
-from django_demo.utils.response_helper import MyResponse, ResState
-from django_demo.utils.token_handler import TokenHandler
+from user.models import UserInfo
+from utils.email_handler import django_send_email
+from utils.response_helper import MyResponse, ResState
+from utils.token_handler import TokenHandler
 
 # 跳转到登录页面
 def to_login(request):
