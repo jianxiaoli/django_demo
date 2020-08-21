@@ -5,9 +5,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
-BROKER_URL = 'redis://10.248.224.131:6379/2'
-CELERY_RESULT_BACKEND = 'redis://10.248.224.131:6379/3'
+# 支持celery
+import djcelery
+djcelery.setup_loader()
+BROKER_URL = 'redis://127.0.0.1:6379/1'
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/2'
 CELERY_TIMEZONE = 'Asia/Shanghai'
 BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 864000}  # 任务时效 10天
 CELERY_ENABLE_UTC = False
@@ -37,4 +39,4 @@ DATABASES = {
 
 
 ### redis配置
-REDIS_CFG = {"host": "10.248.224.131", "port": 6379,"db":6}
+REDIS_CFG = {"host": "127.0.0.1", "port": 6379,"db":0}

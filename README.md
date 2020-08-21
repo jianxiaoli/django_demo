@@ -1,6 +1,8 @@
 python 3.6.4
 celery需要分端口
 
+启动本地redis
+/usr/local/redis-4.0.6/src/redis-server /usr/local/redis-4.0.6/redis.conf
 
 
 VirutalEnv

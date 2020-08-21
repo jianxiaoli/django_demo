@@ -85,10 +85,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# 支持celery
-import djcelery
-djcelery.setup_loader()
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
