@@ -1,11 +1,8 @@
 import re
 
 from django.contrib.auth.hashers import make_password, check_password
-from django.core import serializers
-from django.http import HttpResponse, response, JsonResponse
 from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
-from pip._vendor.requests import Response
 
 from django_demo.apps.user.models import UserInfo
 from django_demo.utils.response_helper import MyResponse, ResState

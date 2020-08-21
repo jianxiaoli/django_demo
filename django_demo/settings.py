@@ -147,3 +147,10 @@ STATICFILES_DIRS = [
 TEMPLATE_DIRS = (os.path.join(BASE_DIR,  'templates'),)
 
 OUT_TIME = 60
+
+### redis配置
+REDIS_CFG = {"host": "10.248.224.131", "port": 6379,"db":0}
+
+###日志文件
+LOGFILE_DIR = "/data"
+LOGFILE_NAME = "django-demo.log"

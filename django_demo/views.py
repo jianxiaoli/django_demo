@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 
+from django_demo import logger
+
 
 def index(request):
-    # 获取当前用户的随机字符串
-    # 根据随机字符串获取对应信息
+    logger.info("1111111111111")
     if request.COOKIES.get('is_login'):
         return render(request, 'index.html')
     else:
