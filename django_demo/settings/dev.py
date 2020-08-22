@@ -37,7 +37,7 @@ DATABASES = {
         'NAME': 'django_demo',   #  指定的数据库名
         'USER': 'devops',   #  数据库登录的用户名
         'PASSWORD': 'Oqa_rG1j8jLDBNv',  #  登录数据库的密码
-        'HOST': '127.0.0.1',
+        'HOST': '10.248.224.131',
         'PORT': '3306',   #  数据库服务器端口，mysql默认为3306
     }
 }

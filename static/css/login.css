@@ -18,14 +18,13 @@ body {
 .form {
 	clear: both;
 	border-radius: 5px;
-	background:url("/static/img/backrgound-from.png") center no-repeat ;
 	background-size:100% 100%;
 	float: left;
 	width: 460px;
 	height: 300px;
 	padding: 20px;
 	margin-left: 35%;
-	margin-top:5%;
+	margin-top:3%;
 
 }
 .login-title{

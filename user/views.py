@@ -61,16 +61,20 @@ def login(request):
     username = request.POST.get("username")
     pwd = request.POST.get("pwd")
     try:
+        if username is None or username == "":
+            return myRes.to_json_msg("用户名不能为空")
+        if pwd is None or pwd == "":
+            return myRes.to_json_msg("密码不能为空")
         user = UserInfo.objects.filter(username=username).first()
         if user is None:
-            raise Exception("用户不存在")
+            return myRes.to_json_msg("用户不存在")
         if user.is_enabled == 1:
             return myRes.to_json_msg("请先激活账号")
         pwd_bool = check_password(pwd, user.pwd)
         if not pwd_bool:
             return myRes.to_json_msg("密码错误")
         response = myRes.to_json()
-        response.set_cookie("is_login", True)
+        # response.set_cookie("is_login", True)
         myRes.status = ResState.HTTP_SUCCESS
         myRes.msg = "登录成功"
         return myRes.to_json()
