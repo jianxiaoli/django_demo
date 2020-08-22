@@ -21,17 +21,16 @@
     <div style="width:420px;height:255px;background: #fff;border-radius: 5px;padding: 0px">
         <div class="login-title input-group-addon">用户登录</div>
         <div class="form-group input" style="margin-top: 20px;">
-            <input type="input" value="{{ request.COOKIES.username }}" autocomplete="off" maxlength="20" id="username"
+            <input type="input" value="" autocomplete="off" maxlength="20" id="username"
                    name="username" placeholder="请输入用户账号" class="form-control">
         </div>
 
         <div class="form-group input" style=";margin-top: 10px;">
-            <input type="password" value="{{ request.COOKIES.pwd }}" autocomplete="off" maxlength="20" id="pwd"
+            <input type="password" value="" autocomplete="off" maxlength="20" id="pwd"
                    name="pwd" placeholder="请输入用户密码" class="form-control">
         </div>
 
-        <div class="form-group" style="width: 100%;;line-height: 30px"><input name="remember"
-                                                                              id="remember" {{ request.COOKIES.remember }}
+        <div class="form-group" style="width: 100%;;line-height: 30px"><input name="remember" id="remember"
                                                                               type="checkbox"
                                                                               style="margin-left: 10%;float: left;margin-top: 9px"><label
                 for="remember" style="float: left;margin-left: 5px">记住密码？</label>

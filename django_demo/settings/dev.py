@@ -43,5 +43,24 @@ DATABASES = {
 }
 
 
+# redis在django中的配置
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "CONNECTION_POOL_KWARGS": {"max_connections": 100}
+            # "PASSWORD": "123",
+        }
+    }
+}
+# session的存储配置
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+SESSION_CACHE_ALIAS = 'default'
+
+# 设置session失效时间,单位为秒
+SESSION_COOKIE_AGE = 60*5
+
 ### redis配置
 REDIS_CFG = {"host": "127.0.0.1", "port": 6379,"db":0}

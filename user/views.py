@@ -74,7 +74,9 @@ def login(request):
         if not pwd_bool:
             return myRes.to_json_msg("密码错误")
         response = myRes.to_json()
-        # response.set_cookie("is_login", True)
+        token = TokenHandler().encrypt(str(user.id))
+        response.set_cookie("token", token)
+        request.session["token"] = token
         myRes.status = ResState.HTTP_SUCCESS
         myRes.msg = "登录成功"
         return myRes.to_json()
