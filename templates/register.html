@@ -46,7 +46,6 @@
 
 <script src="/static/js/jquery-2.2.2.min.js"></script>
 <script src="/static/js/bootstrap/js/bootstrap.min.js"></script>
-<script src="/static/js/bootstrap/bootbox.all.min.js"></script>
 <script src="/static/js/jquery.form.js"></script>
 <script src="/static/js/comm.js"></script>
 <script src="/static/js/axjx_csrf.js"></script>
@@ -63,14 +62,8 @@
             success: function (result) {
                 console.info(result)
                 if (result.state) {
-                    bootbox.alert({
-                        title: "注册成功",
-                        message: "请到邮箱点击激活链接激活账号",
-                        callback: function (result) {
-                            window.location.href = "{% url 'to_login' %}"
-                        }
-                    });
-
+                    alert("注册成功,请到邮箱点击激活链接激活账号")
+                    window.location.href = "{% url 'to_login' %}"
                 } else {
                     myAlertTop(result.msg)
                 }

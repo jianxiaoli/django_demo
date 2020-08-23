@@ -34,4 +34,9 @@ urlpatterns = [
     url(r'^user/register', user.views.register, name='register'),
     url(r'^user/login', user.views.login, name='login'),
     path('user/active/<token>', user.views.active),
-    ]
+]
+
+handler400 = django_demo.views.bad_request
+handler403 = django_demo.views.permission_denied
+handler404 = django_demo.views.page_not_found
+handler500 = django_demo.views.server_error

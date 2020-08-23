@@ -62,6 +62,7 @@
             success: function (result) {
                 console.info(result)
                 if(result.state){
+                    alert("登录成功")
                     window.location.href = "{% url 'index' %}"
                 } else {
                     myAlertTop(result.msg)
