@@ -7,6 +7,10 @@ pip install virtualenv
 mkdir /opt/venv
 /usr/local/python3/bin/virtualenv -p /usr/bin/python3 /opt/venv/django_demo
 
+日志组件在windows下需要安装pywin32==228
+
+
+
 生成requirements.txt
 1、生成架包依赖文件
 pip freeze > requirements.txt

@@ -5,6 +5,7 @@ from django.views.decorators.http import require_http_methods
 from django_demo import logger
 from user import tasks
 from user.models import UserInfo
+from user.tasks import send_register_email
 from utils.email_handler import django_send_email
 from utils.response_helper import MyResponse, ResState
 from utils.token_handler import TokenHandler
@@ -47,6 +48,7 @@ def register(request):
         token = TokenHandler().encrypt(str(user.id))
         user_id = TokenHandler().decrypt(token)
         logger.info("user_id is {0}".format(user_id))
+        # send_register_email(username,token,email)
         tasks.send_register_email.delay(username,token,email)
     except Exception as ex:
         logger.error("Register error by {0}".format(ex))
@@ -68,8 +70,10 @@ def login(request):
         user = UserInfo.objects.filter(username=username).first()
         if user is None:
             return myRes.to_json_msg("用户不存在")
-        if user.is_enabled == 1:
+        if user.is_active == 1:
             return myRes.to_json_msg("请先激活账号")
+        if user.is_enabled == 1:
+            return myRes.to_json_msg("账号已被禁用，请与管理员连携")
         pwd_bool = check_password(pwd, user.pwd)
         if not pwd_bool:
             return myRes.to_json_msg("密码错误")
