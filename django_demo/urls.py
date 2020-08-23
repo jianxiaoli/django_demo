@@ -14,16 +14,20 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+from django.conf import settings
+from django.conf.urls.static import static
 from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path
+from django.views.static import serve
 
 import django_demo
 import user
-from django_demo import views
+from django_demo import views, settings
 from user import views
 
 urlpatterns = [
+
     url(r'^admin', admin.site.urls),
     url(r'^$', django_demo.views.index),
     url(r'^index', django_demo.views.index, name='index'),
@@ -35,8 +39,3 @@ urlpatterns = [
     url(r'^user/login', user.views.login, name='login'),
     path('user/active/<token>', user.views.active),
 ]
-
-handler400 = django_demo.views.bad_request
-handler403 = django_demo.views.permission_denied
-handler404 = django_demo.views.page_not_found
-handler500 = django_demo.views.server_error
